@@ -62,6 +62,11 @@ async def joined(ctx, member: discord.Member):
     """Says when a member has joined the server."""
     await ctx.send(shortprefix + '{0.name} has joined on {0.joined_at}.'.format(member))
 
+@client.event
+async def on_message(message):
+    if message.author.id is not discord.Client().id:
+        unitConversion.process(message)
+
 content = ''
 with open('/home/pi/FTP/keystonebottoken.txt', 'r') as content_file:
     content = content_file.read()
