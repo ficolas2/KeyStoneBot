@@ -63,9 +63,11 @@ units.append( NormalUnit("foot|feet|ft", 0.3048, UnitTypes.DISTANCE) )
 units.append( NormalUnit("miles|mile|mi", 1609.344, UnitTypes.DISTANCE) )
 
 units.append( NormalUnit("pounds|pound|lb", 453.59237, UnitTypes.MASS) )
-message = { "modified": False, "text" : "a 3.5 inch 5 feet, 3 miles, 5 pounds dick, 5 million" }
-for u in units:
-  message = u.convert(message);
-  
-if message["modified"]:
-    print("I think @___ meant to say \"" + message["text"] + "\", please forgive him")
+    
+def process(message):
+    modificableMessage = { "modified": False, "text": message }
+    for u in units:
+        message = u.convert(message)
+    if modificableMessage.modified:
+        return modificableMessage.message
+    
