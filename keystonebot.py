@@ -67,7 +67,10 @@ async def joined(ctx, member: discord.Member):
 @client.event
 async def on_message(message):
     if message.author.id is not discord.Client().id:
-        unitConversion.process(message)
+        processedMessage = unitConversion.process(message.content)
+        if processedMessage is not None:
+            correctionText = "I think " + author.name + " meant to say ```" + processedMessage + "```, please forgive him."
+            await client.send_message(message.channel, correctionText)
 
 content = ''
 with open('/home/pi/FTP/keystonebottoken.txt', 'r') as content_file:
