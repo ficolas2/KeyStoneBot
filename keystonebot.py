@@ -22,6 +22,8 @@ import subprocess
 
 import sys
 
+import unitConversion
+
 description = '''A moderator assisting bot created for KeyStoneScience\'s server.'''
 bot = commands.Bot(command_prefix='!', description=description)
 
