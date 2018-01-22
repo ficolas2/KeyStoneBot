@@ -47,13 +47,27 @@ async def clean(ctx):
 @clean.command(name='user')
 async def _user(ctx, member: discord.Member):
     """Cleans messages from [user] in the channel the command is typed in."""
-    ctx.channel.purge(limit=100, check=lambda x: x.author == member)
+    if
+        deleted = await ctx.channel.purge(limit=100, check=lambda x: x.author == member)
 
 @clean.command(name='any')
 async def _any(ctx, amount: int):
-    """Cleans the last [n] messages in the channel the command is typed in."""
+    """Cleans the last [n] messages in the channel the command is typed in. If no argument is given, it removes the last 10 messages."""
     await ctx.send(shortprefix + 'you wanted to delete {0} messages.'.format(amount)) #todo: implement
-    
+    if amount < 301 and amount > 0:
+                deleted = await message.channel.purge(limit=amount)
+            else:
+                deleted = await message.channel.purge(limit=10)
+            tmp = await message.channel.send(':strawberry: PiPy Bot - Cleaning\nDeleted {} message(s)'.format(len(deleted)))
+            await asyncio.sleep(5.0)
+            await tmp.delete()
+
+@bot.command()
+async def temperature:
+    """Shows the system core temperature of the host system this bot is running on."""
+    result = subprocess.run(['vcgencmd', 'measure_temp'], stdout=subprocess.PIPE)
+    await message.channel.send(longprefix + 'Temperature\n```%s```' % (result.stdout[0:-1].decode('ascii')))
+
 @bot.command()
 async def about(ctx):
     """Shows information about the bot aswell as the relevant version numbers."""
@@ -71,9 +85,9 @@ async def on_message(message):
         if processedMessage is not None:
             correctionText = "I think " + message.author.name + " meant to say: ```" + processedMessage + "```Please forgive him."
             await bot.send_message(message.channel, correctionText)
-            
+
 content = ''
-with open('/home/pi/FTP/keystonebottoken.txt', 'r') as content_file:
+with open('token', 'r') as content_file:
     content = content_file.read()
 
 bot.run(content)
