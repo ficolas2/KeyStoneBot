@@ -126,6 +126,7 @@ units.append( NormalUnit("miles? per hour|mph", VELOCITY, 0.44704) )	#miles per 
 #Mass
 units.append( NormalUnit( "ounces?|oz", MASS, 28.349523125 ) )	#ounces
 units.append( NormalUnit( "pounds?|lbs?", MASS, 453.59237 ) )	#pounds
+units.append( NormalUnit( "stones?|st?", MASS, 63502.293318 ) )	#stones
 
 #Temperature
 units.append( NormalUnit("º?F|(degrees ?)?farenheit", TEMPERATURE, 5/9, -32 ) )	#Degrees freedom
