@@ -56,9 +56,7 @@ async def _user(ctx, member: discord.Member, amount: int):
         deleted = await ctx.channel.purge(limit=amount, check=lambda x: x.author == member)
     else:
         deleted = await ctx.channel.purge(limit=10, check=lambda x: x.author == member)
-    tmp = await ctx.send(longprefix + 'Cleaning\nDeleted {} message(s) from {}'.format(len(deleted), member))
-    await asyncio.sleep(5.0)
-    await tmp.delete()
+    await ctx.send(longprefix + 'Cleaning\nDeleted {} message(s) from {}'.format(len(deleted), member), delete_after=5.0)
 
 @clean.command(name='any')
 async def _any(ctx, amount: int):
@@ -68,9 +66,7 @@ async def _any(ctx, amount: int):
         deleted = await ctx.channel.purge(limit=amount)
     else:
         deleted = await ctx.channel.purge(limit=10)
-        tmp = await ctx.send(longprefix + 'Cleaning\nDeleted {} message(s)'.format(len(deleted)))
-        await asyncio.sleep(5.0)
-        await tmp.delete()
+        await ctx.send(longprefix + 'Cleaning\nDeleted {} message(s)'.format(len(deleted)), delete_after=3.0)
 
 @bot.command()
 async def temperature(ctx):
