@@ -60,7 +60,7 @@ class Unit:
 class NormalUnit( Unit ):
         def __init__( self, regex, unitType, toSIMultiplication, toSIAddition = 0 ):
             super( NormalUnit, self ).__init__(unitType, toSIMultiplication, toSIAddition)
-            self._regex = re.compile( regex + "(?![a-z])")
+            self._regex = re.compile( regex + "(?![a-z])", re.IGNORECASE )
         
         def convert( self, message ):
             originalText = message.getText()
