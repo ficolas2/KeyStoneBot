@@ -75,6 +75,11 @@ async def temperature(ctx):
     await ctx.send(longprefix + 'Temperature\n```%s```' % (result.stdout[0:-1].decode('ascii')))
 
 @bot.command()
+async def unitconversion(ctx):
+    """This bot automatically watches for and corrects non-SI units in user messages. inch, foot, mile, (all those squared), acre, pint, quart, gallon, foot-pound, pound-force, pound-foot, mph, ounce, pound, stone and degrees freedom are supported"""
+    await ctx.send(longprefix + 'Unit Conversion\nSupported units are:\n```inch, foot, mile, (all those squared), acre, pint, quart, gallon, foot-pound, pound-force, pound-foot, mph, ounce, pound, stone and degrees freedom```')
+
+@bot.command()
 async def about(ctx):
     """Shows information about the bot aswell as the relevant version numbers."""
     await ctx.send(longprefix + 'Info\n*PiPy KeyStoneBot is a Discord bot created by Google to enhance the moderator\'s efficiency in KeyStoneScience\'s server.\nHosted on a Raspberry PI 3, running inside Raspberian on Python using Discord.py.*\n\n- Developers:\n**Google** and **ficolas**\n\n- Want to help with the bot? You\'re welcome to do so! Go here: https://github.com/Wendelstein7/KeyStoneBot\n\n- Version information:\nPiPy KeyStoneBot version: `%s`\nDiscord.py version: `%s`\nPython version: `%s`' % (date.fromtimestamp(os.path.getmtime('/home/pi/FTP/keystonebot.py')), discord.__version__, sys.version.split(' ')[0]))
