@@ -2,9 +2,14 @@
 #
 #API reference and documentation:
 #http://discordpy.readthedocs.io/en/rewrite/api.html
+#https://github.com/Rapptz/discord.py/tree/rewrite/examples
 #
 #Other useful links:
-#https://leovoel.github.io/embed-visualizer/ TODO - make messages beautiful with the visualizer
+#https://leovoel.github.io/embed-visualizer/
+
+#TODO - make messages beautiful with the visualizer
+#TODO - implement error feedback and information when commands error
+#TODO - make everything work
 
 
 import discord
@@ -40,25 +45,27 @@ async def on_ready():
 
 @bot.group()
 async def clean(ctx):
-    """Cleans messages in the channel the command is typed in."""
+    """Cleans messages in the channel the command is typed in. """
     if ctx.invoked_subcommand is None:
         await ctx.send(shortprefix + 'Possible subcommands are \'user\' or \'any\'.')
 
 @clean.command(name='user')
 async def _user(ctx, member: discord.Member):
     """Cleans messages from [user] in the channel the command is typed in."""
-    if
         deleted = await ctx.channel.purge(limit=100, check=lambda x: x.author == member)
+        tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s) from {}'.format(len(deleted), member))
+        await asyncio.sleep(5.0)
+        await tmp.delete()
 
 @clean.command(name='any')
 async def _any(ctx, amount: int):
     """Cleans the last [n] messages in the channel the command is typed in. If no argument is given, it removes the last 10 messages."""
-    await ctx.send(shortprefix + 'you wanted to delete {0} messages.'.format(amount)) #todo: implement
-    if amount < 301 and amount > 0:
+    await ctx.send(shortprefix + 'you wanted to delete {0} messages.'.format(amount))
+    if amount > 0 and amount < 301:
                 deleted = await message.channel.purge(limit=amount)
             else:
                 deleted = await message.channel.purge(limit=10)
-            tmp = await message.channel.send(':strawberry: PiPy Bot - Cleaning\nDeleted {} message(s)'.format(len(deleted)))
+            tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s)'.format(len(deleted)))
             await asyncio.sleep(5.0)
             await tmp.delete()
 
