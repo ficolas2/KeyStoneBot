@@ -62,9 +62,9 @@ async def _any(ctx, amount: int):
     """Cleans the last [n] messages in the channel the command is typed in. If no argument is given, it removes the last 10 messages."""
     await ctx.send(shortprefix + 'you wanted to delete {0} messages.'.format(amount))
     if amount > 0 and amount < 301:
-            deleted = await message.channel.purge(limit=amount)
-        else:
-            deleted = await message.channel.purge(limit=10)
+        deleted = await message.channel.purge(limit=amount)
+    else:
+        deleted = await message.channel.purge(limit=10)
         tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s)'.format(len(deleted)))
         await asyncio.sleep(5.0)
         await tmp.delete()
