@@ -45,17 +45,17 @@ async def on_ready():
 
 @bot.group()
 async def clean(ctx):
-    """Cleans messages in the channel the command is typed in. """
+    """Cleans messages in the channel the command is typed in."""
     if ctx.invoked_subcommand is None:
         await ctx.send(shortprefix + 'Possible subcommands are \'user\' or \'any\'.')
 
 @clean.command(name='user')
 async def _user(ctx, member: discord.Member):
     """Cleans messages from [user] in the channel the command is typed in."""
-        deleted = await ctx.channel.purge(limit=100, check=lambda x: x.author == member)
-        tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s) from {}'.format(len(deleted), member))
-        await asyncio.sleep(5.0)
-        await tmp.delete()
+    deleted = await ctx.channel.purge(limit=100, check=lambda x: x.author == member)
+    tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s) from {}'.format(len(deleted), member))
+    await asyncio.sleep(5.0)
+    await tmp.delete()
 
 @clean.command(name='any')
 async def _any(ctx, amount: int):
