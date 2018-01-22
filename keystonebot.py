@@ -50,9 +50,12 @@ async def clean(ctx):
         await ctx.send(shortprefix + 'Possible subcommands are \'user\' or \'any\'.')
 
 @clean.command(name='user')
-async def _user(ctx, member: discord.Member):
-    """Cleans messages from [user] in the channel the command is typed in."""
-    deleted = await ctx.channel.purge(limit=100, check=lambda x: x.author == member)
+async def _user(ctx, member: discord.Member, amount: int):
+    """Cleans [n] messages from [user] in the channel the command is typed in."""
+    if amount > 0 and amount < 301:
+        deleted = await ctx.channel.purge(limit=amount, check=lambda x: x.author == member)
+    else:
+        deleted = await ctx.channel.purge(limit=10, check=lambda x: x.author == member)
     tmp = await ctx.send(longprefix + 'Cleaning\nDeleted {} message(s) from {}'.format(len(deleted), member))
     await asyncio.sleep(5.0)
     await tmp.delete()
