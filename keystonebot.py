@@ -91,7 +91,7 @@ async def on_message(message):
         processedMessage = unitconversion.process(message.content)
         if processedMessage is not None:
             correctionText = "I think " + message.author.name + " meant to say: ```" + processedMessage + "```Please forgive him."
-            await bot.send_message(message.channel, correctionText)
+            await message.channel.send(message.channel, correctionText)
 
 with open('token', 'r') as content_file:
     content = content_file.read()
