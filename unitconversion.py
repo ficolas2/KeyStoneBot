@@ -5,24 +5,24 @@ from enum import Enum
 import re
 
 END_NUMBER_REGEX = re.compile("[0-9]+([\,\.][0-9]+)?\s*$")
-REMOVE_REGEX = re.compile("´+[^>]+´+")
+REMOVE_REGEX = re.compile("((´|`)+[^>]+(´|`)+)")
 DECIMALS = 3
 
 class UnitType:
 
     def __init__( self ):
         self._multiples = {}
-    
+
     def addMultiple( self, unit, multiple ):
         self._multiples[ multiple ] = unit
         return self
-        
+
     def getStringFromMultiple(self, value, multiple):
         numberString = str(round(value / multiple, DECIMALS))
         if numberString[-2:] == ".0":
             numberString = numberString[:-2]
         return numberString + self._multiples[multiple]
-    
+
     def getString( self, value ):
         sortedMultiples = sorted(self._multiples, reverse=True)
         for multiple in sortedMultiples:
@@ -46,13 +46,13 @@ class Unit:
         self._unitType = unitType
         self._toSIMultiplication = toSIMultiplication
         self._toSIAddition = toSIAddition
-    
+
     def toMetric( self, value ):
         SIValue = ( value + self._toSIAddition ) * self._toSIMultiplication
         if self._toSIAddition == 0 and SIValue == 0:
             return
         return self._unitType.getString( SIValue )
-    
+
     @abstractmethod
     def convert( self, message ): pass
 
@@ -61,7 +61,7 @@ class NormalUnit( Unit ):
     def __init__( self, regex, unitType, toSIMultiplication, toSIAddition = 0 ):
         super( NormalUnit, self ).__init__(unitType, toSIMultiplication, toSIAddition)
         self._regex = re.compile( "(" + regex + ")(?![a-z])", re.IGNORECASE )
-    
+
     def convert( self, message ):
         originalText = message.getText()
         iterator = self._regex.finditer( originalText )
@@ -69,7 +69,7 @@ class NormalUnit( Unit ):
         for find in iterator:
             numberResult = END_NUMBER_REGEX.search( originalText[ 0 : find.start() ] )
             if numberResult is not None:
-                metricValue = self.toMetric( float( numberResult.group().replace(",", ".") ) ) 
+                metricValue = self.toMetric( float( numberResult.group().replace(",", ".") ) )
                 if metricValue is None:
                     continue
                 repl = {}
@@ -89,21 +89,21 @@ class NormalUnit( Unit ):
 # Class containing a string, for the modificable message, and a boolean
 # to indicate if the message has been modified
 class ModificableMessage:
-    
+
     def __init__(self, text):
         self._text = text
         self._modified = False
-        
+
     def getText(self):
         return self._text
-    
+
     def setText(self, text):
         self._text = text
         self._modified = True
-        
+
     def isModified(self):
         return self._modified
-        
+
 units = []
 
 #Distance units
@@ -142,9 +142,9 @@ units.append( NormalUnit( "stones?|st", MASS, 6350.2293318 ) )  #stones
 units.append( NormalUnit("º?F|(degrees? )?farenheit", TEMPERATURE, 5/9, -32 ) )    #Degrees freedom
 #Pressure
 units.append( NormalUnit( "pounds?((-| )?force)? per square in(ch)?|lbf\/in\^2|psi", PRESSURE, 0.068046 ) ) #Pounds per square inch
- 
+
 #Processes a string, converting freedom units to science units.
-def process(message):    
+def process(message):
     modificableMessage = ModificableMessage(REMOVE_REGEX.sub("", message))
     for u in units:
         u.convert(modificableMessage)
