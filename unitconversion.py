@@ -17,7 +17,10 @@ class UnitType:
         return self
 
     def getStringFromMultiple(self, value, multiple):
-        return str(round(value / multiple, DECIMALS)) + self._multiples[multiple]
+        numberString = str(round(value / multiple, DECIMALS));
+        if numberString[-2:] == ".0":
+            numberString = numberString[:-2]
+        return numberString + self._multiples[multiple]
 
     def getString( self, value ):
         sortedMultiples = sorted(self._multiples, reverse=True)
