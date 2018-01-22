@@ -73,7 +73,6 @@ async def on_message(message):
             await bot.send_message(message.channel, correctionText)
             
 content = ''
-
 with open('/home/pi/FTP/keystonebottoken.txt', 'r') as content_file:
     content = content_file.read()
 
