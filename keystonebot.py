@@ -71,8 +71,9 @@ async def on_message(message):
         if processedMessage is not None:
             correctionText = "I think " + message.author.name + " meant to say: ```" + processedMessage + "```Please forgive him."
             await bot.send_message(message.channel, correctionText)
-            content = ''
             
+content = ''
+
 with open('/home/pi/FTP/keystonebottoken.txt', 'r') as content_file:
     content = content_file.read()
 
