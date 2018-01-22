@@ -22,7 +22,7 @@ import subprocess
 
 import sys
 
-import unitConversion
+import unitconversion
 
 description = '''A moderator assisting bot created for KeyStoneScience\'s server.'''
 bot = commands.Bot(command_prefix='!', description=description)
@@ -64,16 +64,12 @@ async def joined(ctx, member: discord.Member):
     """Says when a member has joined the server."""
     await ctx.send(shortprefix + '{0.name} has joined on {0.joined_at}.'.format(member))
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author.id is not discord.Client().id:
-        processedMessage = unitConversion.process(message.content)
+    if bot.user.id is not message.author.id:
+        processedMessage = unitconversion.process(message.content)
         if processedMessage is not None:
-            correctionText = "I think " + author.name + " meant to say ```" + processedMessage + "```, please forgive him."
-            await client.send_message(message.channel, correctionText)
-
-content = ''
-with open('/home/pi/FTP/keystonebottoken.txt', 'r') as content_file:
-    content = content_file.read()
+            correctionText = "I think " + message.author.name + " meant to say: ```" + processedMessage + "```Please forgive him."
+            await bot.send_message(message.channel, correctionText)
 
 bot.run(content)
