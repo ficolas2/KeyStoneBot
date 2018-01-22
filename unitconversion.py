@@ -11,14 +11,14 @@ class UnitType:
 
     def __init__( self ):
         self._multiples = {}
-    
+
     def addMultiple( self, unit, multiple ):
         self._multiples[ multiple ] = unit;
         return self
-        
+
     def getStringFromMultiple(self, value, multiple):
         return str(round(value / multiple, DECIMALS)) + self._multiples[multiple]
-    
+
     def getString( self, value ):
         sortedMultiples = sorted(self._multiples, reverse=True)
         for multiple in sortedMultiples:
@@ -42,10 +42,10 @@ class Unit:
         self._unitType = unitType
         self._toSIMultiplication = toSIMultiplication
         self._toSIAddition = toSIAddition
-    
+
     def toMetric( self, value ):
         return self._unitType.getString( ( value + self._toSIAddition ) * self._toSIMultiplication)
-    
+
     @abstractmethod
     def convert( self, message ): pass
 
@@ -54,7 +54,7 @@ class NormalUnit( Unit ):
     def __init__( self, regex, unitType, toSIMultiplication, toSIAddition = 0 ):
         super( NormalUnit, self ).__init__(unitType, toSIMultiplication, toSIAddition)
         self._regex = re.compile( regex + "(?![a-z])")
-    
+
     def convert( self, message ):
         originalText = message.getText()
         iterator = self._regex.finditer( originalText )
@@ -64,7 +64,7 @@ class NormalUnit( Unit ):
             if numberResult is not None:
                 repl = {}
                 repl[ "start" ] = numberResult.start()
-                repl[ "text"  ] = self.toMetric( float( numberResult.group() ) ) 
+                repl[ "text"  ] = self.toMetric( float( numberResult.group() ) )
                 repl[ "end" ] = find.end()
                 replacements.append(repl)
         if len(replacements)>0:
@@ -79,21 +79,21 @@ class NormalUnit( Unit ):
 # Class containing a string, for the modificable message, and a boolean
 # to indicate if the message has been modified
 class ModificableMessage:
-    
+
     def __init__(self, text):
         self._text = text
         self._modified = False
-        
+
     def getText(self):
         return self._text
-    
+
     def setText(self, text):
         self._text = text
         self._modified = True
-        
+
     def isModified(self):
         return self._modified
-        
+
 units = []
 
 #Distance units
@@ -128,12 +128,12 @@ units.append( NormalUnit( "ounces?|oz", MASS, 28.349523125 ) )	#ounces
 units.append( NormalUnit( "pounds?|lbs?", MASS, 453.59237 ) )	#pounds
 
 #Temperature
-units.append( NormalUnit("º?F", TEMPERATURE, 5/9, -32 ) )	#Degrees freedom
+units.append( NormalUnit("º?F|(degrees ?)?farenheit", TEMPERATURE, 5/9, -32 ) )	#Degrees freedom
 #Pressure
 units.append( NormalUnit( "pounds?((-| )?force)? per square in(ch)?|lbf\/in\^2|psi", PRESSURE, 0.068046 ) ) #Pounds per square inch
- 
+
 #Processes a string, converting freedom units to science units.
-def process(message):    
+def process(message):
     modificableMessage = ModificableMessage(message)
     for u in units:
         u.convert(modificableMessage)
