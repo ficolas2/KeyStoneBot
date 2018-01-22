@@ -58,33 +58,33 @@ class Unit:
 
 #NormalUnit class, that follow number + unit name.
 class NormalUnit( Unit ):
-        def __init__( self, regex, unitType, toSIMultiplication, toSIAddition = 0 ):
-            super( NormalUnit, self ).__init__(unitType, toSIMultiplication, toSIAddition)
-            self._regex = re.compile( regex + "(?![a-z])", re.IGNORECASE )
-        
-        def convert( self, message ):
-            originalText = message.getText()
-            iterator = self._regex.finditer( originalText )
-            replacements = []
-            for find in iterator:
-                numberResult = END_NUMBER_REGEX.search( originalText[ 0 : find.start() ] )
-                if numberResult is not None:
-                    metricValue = self.toMetric( float( numberResult.group().replace(",", ".") ) ) 
-                    if metricValue is None:
-                        continue
-                    repl = {}
-                    repl[ "start" ] = numberResult.start()
-                    repl[ "text"  ] = metricValue
-                    repl[ "end" ] = find.end()
-                    replacements.append(repl)
-            if len(replacements)>0:
-                lastPoint = 0
-                finalMessage = ""
-                for repl in replacements:
-                    finalMessage += originalText[ lastPoint: repl[ "start" ] ] + repl[ "text" ]
-                    lastPoint = repl["end"]
-                finalMessage += originalText[ lastPoint : ]
-                message.setText(finalMessage)
+    def __init__( self, regex, unitType, toSIMultiplication, toSIAddition = 0 ):
+        super( NormalUnit, self ).__init__(unitType, toSIMultiplication, toSIAddition)
+        self._regex = re.compile( regex + "(?![a-z])", re.IGNORECASE )
+    
+    def convert( self, message ):
+        originalText = message.getText()
+        iterator = self._regex.finditer( originalText )
+        replacements = []
+        for find in iterator:
+            numberResult = END_NUMBER_REGEX.search( originalText[ 0 : find.start() ] )
+            if numberResult is not None:
+                metricValue = self.toMetric( float( numberResult.group().replace(",", ".") ) ) 
+                if metricValue is None:
+                    continue
+                repl = {}
+                repl[ "start" ] = numberResult.start()
+                repl[ "text"  ] = metricValue
+                repl[ "end" ] = find.end()
+                replacements.append(repl)
+        if len(replacements)>0:
+            lastPoint = 0
+            finalMessage = ""
+            for repl in replacements:
+                finalMessage += originalText[ lastPoint: repl[ "start" ] ] + repl[ "text" ]
+                lastPoint = repl["end"]
+            finalMessage += originalText[ lastPoint : ]
+            message.setText(finalMessage)
 
 # Class containing a string, for the modificable message, and a boolean
 # to indicate if the message has been modified
