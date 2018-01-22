@@ -53,7 +53,7 @@ async def clean(ctx):
 async def _user(ctx, member: discord.Member):
     """Cleans messages from [user] in the channel the command is typed in."""
     deleted = await ctx.channel.purge(limit=100, check=lambda x: x.author == member)
-    tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s) from {}'.format(len(deleted), member))
+    tmp = await ctx.send(longprefix + 'Cleaning\nDeleted {} message(s) from {}'.format(len(deleted), member))
     await asyncio.sleep(5.0)
     await tmp.delete()
 
@@ -62,10 +62,10 @@ async def _any(ctx, amount: int):
     """Cleans the last [n] messages in the channel the command is typed in. If no argument is given, it removes the last 10 messages."""
     await ctx.send(shortprefix + 'you wanted to delete {0} messages.'.format(amount))
     if amount > 0 and amount < 301:
-        deleted = await message.channel.purge(limit=amount)
+        deleted = await ctx.channel.purge(limit=amount)
     else:
-        deleted = await message.channel.purge(limit=10)
-        tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s)'.format(len(deleted)))
+        deleted = await ctx.channel.purge(limit=10)
+        tmp = await ctx.send(longprefix + 'Cleaning\nDeleted {} message(s)'.format(len(deleted)))
         await asyncio.sleep(5.0)
         await tmp.delete()
 
@@ -73,7 +73,7 @@ async def _any(ctx, amount: int):
 async def temperature(ctx):
     """Shows the system core temperature of the host system this bot is running on."""
     result = subprocess.run(['vcgencmd', 'measure_temp'], stdout=subprocess.PIPE)
-    await message.channel.send(longprefix + 'Temperature\n```%s```' % (result.stdout[0:-1].decode('ascii')))
+    await ctx.send(longprefix + 'Temperature\n```%s```' % (result.stdout[0:-1].decode('ascii')))
 
 @bot.command()
 async def about(ctx):
