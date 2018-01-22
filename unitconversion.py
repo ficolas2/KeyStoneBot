@@ -22,7 +22,7 @@ class UnitType:
     def getString( self, value ):
         sortedMultiples = sorted(self._multiples, reverse=True)
         for multiple in sortedMultiples:
-            if value > multiple:
+            if value > multiple/2:
                 return self.getStringFromMultiple(value, multiple)
         return self.getStringFromMultiple( value, sortedMultiples[-1] )
 
@@ -32,7 +32,7 @@ VOLUME = UnitType().addMultiple( "L", 1 ).addMultiple( "mL", 10**-3 )
 ENERGY = UnitType().addMultiple( "J", 1 ).addMultiple( "TJ", 10**12 ).addMultiple( "GJ", 10**9 ).addMultiple( "MJ", 10**6 ).addMultiple( "kJ", 10**3 ).addMultiple( "mJ", 10**-3 ).addMultiple( "µJ", 10**-6 ).addMultiple( "nJ", 10**-9 )
 FORCE = UnitType().addMultiple( "N", 1 ).addMultiple( "kN", 10**3 ).addMultiple( "MN", 10**6 )
 TORQUE = UnitType().addMultiple( "N*m", 1 )
-VELOCITY = UnitType().addMultiple("m/s", 1).addMultiple( "km/s", 10**3 ).addMultiple( "cm/s", 10**-2).addMultiple( "mm/s", 10**-3)
+VELOCITY = UnitType().addMultiple("m/s", 1).addMultiple( "km/s", 10**3 ).addMultiple( "km/h", 3.6 )
 MASS = UnitType().addMultiple( "g", 1 ).addMultiple( "kg", 10**3 ).addMultiple( "t", 10**6 ).addMultiple( "mg", 10**-3 ).addMultiple( "µg", 10**-6 )
 TEMPERATURE = UnitType().addMultiple( "C", 1 )
 PRESSURE = UnitType().addMultiple( "atm", 1 )
@@ -97,38 +97,40 @@ class ModificableMessage:
 units = []
 
 #Distance units
-units.append( NormalUnit("inches|inch|in|\"|''", DISTANCE, 0.0254) )
-units.append( NormalUnit("foot|feet|ft|'", DISTANCE, 0.3048) )
-units.append( NormalUnit("miles|mile|mi", DISTANCE, 1609.344) )
+units.append( NormalUnit("in(ch(es)?)?|\"|''", DISTANCE, 0.0254) )	#inch
+units.append( NormalUnit("f(oo|ee)?t|'", DISTANCE, 0.3048) )		#foot
+units.append( NormalUnit("mi(les?)?", DISTANCE, 1609.344) )			#mile
 
 #Area
-# TODO in/ft/mi ^ 2
-units.append( NormalUnit("acre|acres", AREA, 4046.8564224 ) )
+units.append( NormalUnit("in(ch(es)?)? ?(\^2|squared)", DISTANCE, 0.00064516) )	#inch squared
+units.append( NormalUnit("f(oo|ee)?t ?(\^2|squared)", DISTANCE, 0.092903) )		#foot squared
+units.append( NormalUnit("mi(les?)? ?(\^2|squared)", DISTANCE, 2589990) )		#mile squared
+units.append( NormalUnit("acres?", AREA, 4046.8564224 ) )						#acre
 #Volume
-units.append( NormalUnit( "pints|pint|pt|p", VOLUME, 0.473176 ) )
-units.append( NormalUnit( "quarts|quart|qt", VOLUME, 0.946353 ) )
-units.append( NormalUnit( "gallons|gallon|gal", VOLUME, 3.78541 ) )
+units.append( NormalUnit( "pints?|pt|p", VOLUME, 0.473176 ) )	#pint
+units.append( NormalUnit( "quarts?|qt", VOLUME, 0.946353 ) )	#quart
+units.append( NormalUnit( "gal(lons?)?", VOLUME, 3.78541 ) )	#galon
 
 #Energy
-# TODO
+units.append( NormalUnit("ft( |\*)?lbf?|foot( |-)pound", ENERGY, 1.355818) )	#foot-pound
 
 #Force
-# TODO
+units.append( NormalUnit("pound( |-)?force|lbf", FORCE, 4.448222) )	#pound-force
 
 #Torque
-# TODO
+units.append( NormalUnit("Pound(-| )?foot|lbf( |\*)?ft", TORQUE, 1.355818) )	#pound-foot
 
 #Velocity
-# TODO
+units.append( NormalUnit("miles? per hour|mph", VELOCITY, 0.44704) )	#miles per hour
 
 #Mass
-units.append( NormalUnit( "ounces|ounce|oz", MASS, 28.349523125 ) )
-units.append( NormalUnit( "pounds|pound|lbs|lb", MASS, 453.59237 ) )
+units.append( NormalUnit( "ounces?|oz", MASS, 28.349523125 ) )	#ounces
+units.append( NormalUnit( "pounds?|lbs?", MASS, 453.59237 ) )	#pounds
 
 #Temperature
-units.append( NormalUnit("F|ºF", TEMPERATURE, 5/9, -32 ) )
+units.append( NormalUnit("º?F", TEMPERATURE, 5/9, -32 ) )	#Degrees freedom
 #Pressure
-units.append( NormalUnit( "pounds per square inch|lbf/in^2|psi", PRESSURE, 0.068046 ) )
+units.append( NormalUnit( "pounds?((-| )?force)? per square in(ch)?|lbf\/in\^2|psi", PRESSURE, 0.068046 ) ) #Pounds per square inch
  
 #Processes a string, converting freedom units to science units.
 def process(message):    
