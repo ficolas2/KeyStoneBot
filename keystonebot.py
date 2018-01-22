@@ -70,7 +70,7 @@ async def _any(ctx, amount: int):
         await tmp.delete()
 
 @bot.command()
-async def temperature:
+async def temperature(ctx):
     """Shows the system core temperature of the host system this bot is running on."""
     result = subprocess.run(['vcgencmd', 'measure_temp'], stdout=subprocess.PIPE)
     await message.channel.send(longprefix + 'Temperature\n```%s```' % (result.stdout[0:-1].decode('ascii')))
