@@ -62,12 +62,12 @@ async def _any(ctx, amount: int):
     """Cleans the last [n] messages in the channel the command is typed in. If no argument is given, it removes the last 10 messages."""
     await ctx.send(shortprefix + 'you wanted to delete {0} messages.'.format(amount))
     if amount > 0 and amount < 301:
-                deleted = await message.channel.purge(limit=amount)
-            else:
-                deleted = await message.channel.purge(limit=10)
-            tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s)'.format(len(deleted)))
-            await asyncio.sleep(5.0)
-            await tmp.delete()
+            deleted = await message.channel.purge(limit=amount)
+        else:
+            deleted = await message.channel.purge(limit=10)
+        tmp = await message.channel.send(longprefix + 'Cleaning\nDeleted {} message(s)'.format(len(deleted)))
+        await asyncio.sleep(5.0)
+        await tmp.delete()
 
 @bot.command()
 async def temperature:
@@ -93,7 +93,6 @@ async def on_message(message):
             correctionText = "I think " + message.author.name + " meant to say: ```" + processedMessage + "```Please forgive him."
             await bot.send_message(message.channel, correctionText)
 
-content = ''
 with open('token', 'r') as content_file:
     content = content_file.read()
 
