@@ -139,7 +139,7 @@ units.append( NormalUnit( "pounds?|lbs?", MASS, 453.59237 ) )    #pounds
 units.append( NormalUnit( "stones?|st", MASS, 6350.2293318 ) )  #stones
 
 #Temperature
-units.append( NormalUnit("º?F|(degrees ?)?farenheit", TEMPERATURE, 5/9, -32 ) )    #Degrees freedom
+units.append( NormalUnit("º?F|(degrees? )?farenheit", TEMPERATURE, 5/9, -32 ) )    #Degrees freedom
 #Pressure
 units.append( NormalUnit( "pounds?((-| )?force)? per square in(ch)?|lbf\/in\^2|psi", PRESSURE, 0.068046 ) ) #Pounds per square inch
 
