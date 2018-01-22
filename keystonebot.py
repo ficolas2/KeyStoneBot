@@ -77,7 +77,7 @@ async def temperature(ctx):
 @bot.command()
 async def about(ctx):
     """Shows information about the bot aswell as the relevant version numbers."""
-    await ctx.send(longprefix + 'Info\n*PiPy KeyStoneBot is a Discord bot created by <@378840449152188419> to enhance the moderator\'s efficiency in KeyStoneScience\'s server. Hosted on a Raspberry PI 3, running inside Raspberian on Python using Discord.py.*\n\nPiPy KeyStoneBot version: `%s`\nDiscord.py version: `%s`\nPython version: `%s`' % (date.fromtimestamp(os.path.getmtime('/home/pi/FTP/keystonebot.py')), discord.__version__, sys.version.split(' ')[0]))
+    await ctx.send(longprefix + 'Info\n*PiPy KeyStoneBot is a Discord bot created by Google to enhance the moderator\'s efficiency in KeyStoneScience\'s server.\nHosted on a Raspberry PI 3, running inside Raspberian on Python using Discord.py.*\n\n- Developers:\n**Google** and **ficolas**\n\n- Want to help with the bot? You\'re welcome to do so! Go here: https://github.com/Wendelstein7/KeyStoneBot\n\n- Version information:\nPiPy KeyStoneBot version: `%s`\nDiscord.py version: `%s`\nPython version: `%s`' % (date.fromtimestamp(os.path.getmtime('/home/pi/FTP/keystonebot.py')), discord.__version__, sys.version.split(' ')[0]))
 
 @bot.command()
 async def joined(ctx, member: discord.Member):
